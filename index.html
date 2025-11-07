@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Meu Player de Vídeo MP4</title>
+    <title>Meu Player de Stream com Pôster</title>
     <style>
         body { background: #222; display: grid; place-items: center; min-height: 100vh; }
         video { width: 80%; max-width: 900px; }
@@ -9,8 +9,32 @@
 </head>
 <body>
 
-    <video controls src="https://geartool.net:80/movie/nQFPp3/WPvmKG/355449.mp4">
-    </video>
+    <video id="meu-video" controls 
+           poster="https://i.imgur.com/b2bM10t.jpg">
+           </video>
+
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+    <script>
+        // Use este link de stream de teste, que é HTTPS
+        var streamURL = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+
+        var video = document.getElementById('meu-video');
+
+        if (Hls.isSupported()) {
+            var hls = new Hls();
+            hls.loadSource(streamURL);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                // video.play(); // Opcional: Tenta dar play automaticamente
+            });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = streamURL;
+            video.addEventListener('loadedmetadata', function() {
+                // video.play(); // Opcional: Tenta dar play automaticamente
+            });
+        }
+    </script>
 
 </body>
 </html>
